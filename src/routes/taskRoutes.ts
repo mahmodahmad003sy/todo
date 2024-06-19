@@ -42,6 +42,25 @@ const router = Router();
  *           type: string
  *           format: date-time
  *           description: The date the task was last updated
+ *
+ *     CreateTask:
+ *       type: object
+ *       required:
+ *         - title
+ *         - status
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: The title of the task
+ *         description:
+ *           type: string
+ *           description: The description of the task
+ *         status:
+ *           type: string
+ *           enum:
+ *             - in progress
+ *             - completed
+ *           description: The status of the task
  */
 
 /**
@@ -62,7 +81,7 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Task'
+ *             $ref: '#/components/schemas/CreateTask'
  *     responses:
  *       201:
  *         description: The task was successfully created
