@@ -1,10 +1,21 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Task } from "../entity/task";
+import { CreateTaskDto } from "../dto/CreateTaskDto";
+import { validate } from "class-validator";
+import { plainToInstance } from "class-transformer";
 
 // Create a new task
 export const createTask = async (req: Request, res: Response) => {
   const taskRepository = AppDataSource.getRepository(Task);
+
+  const taskDto = plainToInstance(CreateTaskDto, req.body);
+  const errors = await validate(taskDto);
+
+  if (errors.length > 0) {
+    return res.status(400).json(errors);
+  }
+
   const task = taskRepository.create(req.body);
   try {
     await taskRepository.save(task);
