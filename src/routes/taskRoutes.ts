@@ -6,6 +6,7 @@ import {
   updateTask,
   deleteTask,
 } from "../controllers/taskController";
+import { asyncHandler } from "../middleware/asyncHandler";
 
 const router = Router();
 
@@ -13,7 +14,7 @@ const router = Router();
  * @swagger
  * components:
  *   schemas:
- *     Task:
+ *    Task:
  *       type: object
  *       required:
  *         - title
@@ -43,7 +44,7 @@ const router = Router();
  *           format: date-time
  *           description: The date the task was last updated
  *
- *     CreateTask:
+ *    CreateTask:
  *       type: object
  *       required:
  *         - title
@@ -92,7 +93,7 @@ const router = Router();
  *       500:
  *         description: Some server error
  */
-router.post("/", createTask);
+router.post("/", asyncHandler(createTask));
 
 /**
  * @swagger
@@ -102,7 +103,7 @@ router.post("/", createTask);
  *     tags: [Tasks]
  *     responses:
  *       200:
- *         description: The list of the tasks
+ *         description: The list of tasks
  *         content:
  *           application/json:
  *             schema:
@@ -112,13 +113,13 @@ router.post("/", createTask);
  *       500:
  *         description: Some server error
  */
-router.get("/", getTasks);
+router.get("/", asyncHandler(getTasks));
 
 /**
  * @swagger
  * /tasks/{id}:
  *   get:
- *     summary: Get the task by id
+ *     summary: Get the task by ID
  *     tags: [Tasks]
  *     parameters:
  *       - in: path
@@ -126,26 +127,26 @@ router.get("/", getTasks);
  *         schema:
  *           type: integer
  *         required: true
- *         description: The task id
+ *         description: The task ID
  *     responses:
  *       200:
- *         description: The task description by id
+ *         description: The task details
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Task'
  *       404:
- *         description: The task was not found
+ *         description: Task not found
  *       500:
  *         description: Some server error
  */
-router.get("/:id", getTaskById);
+router.get("/:id", asyncHandler(getTaskById));
 
 /**
  * @swagger
  * /tasks/{id}:
  *   put:
- *     summary: Update the task by the id
+ *     summary: Update the task by ID
  *     tags: [Tasks]
  *     parameters:
  *       - in: path
@@ -153,13 +154,13 @@ router.get("/:id", getTaskById);
  *         schema:
  *           type: integer
  *         required: true
- *         description: The task id
+ *         description: The task ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Task'
+ *             $ref: '#/components/schemas/CreateTask'
  *     responses:
  *       200:
  *         description: The task was updated
@@ -168,17 +169,17 @@ router.get("/:id", getTaskById);
  *             schema:
  *               $ref: '#/components/schemas/Task'
  *       404:
- *         description: The task was not found
+ *         description: Task not found
  *       500:
  *         description: Some server error
  */
-router.put("/:id", updateTask);
+router.put("/:id", asyncHandler(updateTask));
 
 /**
  * @swagger
  * /tasks/{id}:
  *   delete:
- *     summary: Remove the task by id
+ *     summary: Remove the task by ID
  *     tags: [Tasks]
  *     parameters:
  *       - in: path
@@ -186,15 +187,15 @@ router.put("/:id", updateTask);
  *         schema:
  *           type: integer
  *         required: true
- *         description: The task id
+ *         description: The task ID
  *     responses:
  *       200:
  *         description: The task was deleted
  *       404:
- *         description: The task was not found
+ *         description: Task not found
  *       500:
  *         description: Some server error
  */
-router.delete("/:id", deleteTask);
+router.delete("/:id", asyncHandler(deleteTask));
 
 export default router;

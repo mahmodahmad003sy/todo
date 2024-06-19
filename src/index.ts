@@ -4,14 +4,19 @@ import bodyParser from "body-parser";
 import { AppDataSource } from "./data-source";
 import taskRoutes from "./routes/taskRoutes";
 import { setupSwagger } from "./swagger";
+import { errorHandler } from "./middleware/errorHandler";
+import { requestLogger } from "./middleware/logger";
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
+app.use(requestLogger);
 app.use("/tasks", taskRoutes);
 
 setupSwagger(app);
+
+app.use(errorHandler);
 
 AppDataSource.initialize()
   .then(() => {
